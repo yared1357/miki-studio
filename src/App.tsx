@@ -17,6 +17,20 @@ import { GALLERY_ITEMS } from './constants';
 export default function App() {
   const [selectedImage, setSelectedImage] = useState<typeof GALLERY_ITEMS[0] | null>(null);
 
+  const handleNext = () => {
+    if (!selectedImage) return;
+    const currentIndex = GALLERY_ITEMS.findIndex(item => item.id === selectedImage.id);
+    const nextIndex = (currentIndex + 1) % GALLERY_ITEMS.length;
+    setSelectedImage(GALLERY_ITEMS[nextIndex]);
+  };
+
+  const handlePrev = () => {
+    if (!selectedImage) return;
+    const currentIndex = GALLERY_ITEMS.findIndex(item => item.id === selectedImage.id);
+    const prevIndex = (currentIndex - 1 + GALLERY_ITEMS.length) % GALLERY_ITEMS.length;
+    setSelectedImage(GALLERY_ITEMS[prevIndex]);
+  };
+
   return (
     <div className="min-h-screen bg-white overflow-x-hidden selection:bg-studio-accent/30">
       <Navbar />
@@ -34,6 +48,8 @@ export default function App() {
       <ImageModal 
         selectedImage={selectedImage} 
         onClose={() => setSelectedImage(null)} 
+        onNext={handleNext}
+        onPrev={handlePrev}
       />
     </div>
   );

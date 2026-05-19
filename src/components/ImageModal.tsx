@@ -1,13 +1,28 @@
+import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { GALLERY_ITEMS } from '../constants';
 
 interface ImageModalProps {
   selectedImage: typeof GALLERY_ITEMS[0] | null;
   onClose: () => void;
+  onNext: () => void;
+  onPrev: () => void;
 }
 
-export default function ImageModal({ selectedImage, onClose }: ImageModalProps) {
+export default function ImageModal({ selectedImage, onClose, onNext, onPrev }: ImageModalProps) {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!selectedImage) return;
+      if (e.key === 'ArrowRight') onNext();
+      if (e.key === 'ArrowLeft') onPrev();
+      if (e.key === 'Escape') onClose();
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedImage, onNext, onPrev, onClose]);
+
   return (
     <AnimatePresence>
       {selectedImage && (
@@ -29,6 +44,31 @@ export default function ImageModal({ selectedImage, onClose }: ImageModalProps) 
             aria-label="Close modal"
           >
             <X className="w-10 h-10 stroke-[1.5px] pointer-events-none" />
+            <span className="absolute inset-0 bg-white/5 rounded-full scale-0 group-hover:scale-100 transition-transform duration-300 pointer-events-none" />
+          </button>
+
+          {/* Navigation Buttons */}
+          <button 
+            onClick={(e) => {
+              e.stopPropagation();
+              onPrev();
+            }}
+            className="fixed left-4 md:left-8 top-1/2 -translate-y-1/2 p-4 text-white/50 hover:text-white transition-all hover:scale-110 active:scale-95 group z-[110]"
+            aria-label="Previous image"
+          >
+            <ChevronLeft className="w-10 h-10 md:w-16 md:h-16 stroke-[1px] pointer-events-none" />
+            <span className="absolute inset-0 bg-white/5 rounded-full scale-0 group-hover:scale-100 transition-transform duration-300 pointer-events-none" />
+          </button>
+
+          <button 
+            onClick={(e) => {
+              e.stopPropagation();
+              onNext();
+            }}
+            className="fixed right-4 md:right-8 top-1/2 -translate-y-1/2 p-4 text-white/50 hover:text-white transition-all hover:scale-110 active:scale-95 group z-[110]"
+            aria-label="Next image"
+          >
+            <ChevronRight className="w-10 h-10 md:w-16 md:h-16 stroke-[1px] pointer-events-none" />
             <span className="absolute inset-0 bg-white/5 rounded-full scale-0 group-hover:scale-100 transition-transform duration-300 pointer-events-none" />
           </button>
 

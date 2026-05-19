@@ -15,7 +15,7 @@ export default function Portfolio({ onSelectImage }: PortfolioProps) {
     : GALLERY_ITEMS.filter(item => item.category === activeCategory);
 
   return (
-    <section id="portfolio" className="py-24 lg:py-48 px-6 lg:px-24 bg-white">
+    <section id="portfolio" className="py-20 lg:py-48 px-4 lg:px-24 bg-white">
       <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-16 gap-8">
         <div>
           <span className="font-display text-[10px] uppercase tracking-[0.3em] text-studio-accent mb-4 block">01 — Selection</span>
@@ -41,7 +41,7 @@ export default function Portfolio({ onSelectImage }: PortfolioProps) {
 
       <motion.div 
         layout
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12"
+        className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-8 md:gap-x-6 md:gap-y-12"
       >
         <AnimatePresence mode="popLayout">
           {filteredItems.map((item) => (
@@ -70,8 +70,8 @@ export default function Portfolio({ onSelectImage }: PortfolioProps) {
               </div>
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="text-2xl mb-1">{item.title}</h3>
-                  <p className="font-display text-[10px] uppercase tracking-widest text-studio-accent">{item.category}</p>
+                  <h3 className="text-lg md:text-2xl mb-1 leading-tight">{item.title}</h3>
+                  <p className="font-display text-[8px] md:text-[10px] uppercase tracking-widest text-studio-accent">{item.category}</p>
                 </div>
               </div>
             </motion.div>
