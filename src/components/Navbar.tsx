@@ -18,7 +18,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 w-full z-50 px-6 py-6 flex justify-between items-center transition-all duration-500 ${isScrolled ? 'bg-black/90 backdrop-blur-md py-4' : 'bg-transparent'}`}>
+      <nav className={`fixed top-0 left-0 w-full z-50 px-6 py-6 flex justify-between items-center transition-all duration-500 ${(isScrolled && !isMobileMenuOpen) ? 'bg-black/90 backdrop-blur-md py-4' : 'bg-transparent'}`}>
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -54,21 +54,52 @@ export default function Navbar() {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -100 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -100 }}
-            className="fixed inset-0 bg-studio-ink z-40 flex flex-col items-center justify-center gap-8 text-white"
+            initial={{ opacity: 0, clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 0)' }}
+            animate={{ opacity: 1, clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)' }}
+            exit={{ opacity: 0, clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 0)' }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed inset-0 bg-black/98 backdrop-blur-3xl z-40 flex flex-col items-center justify-center"
           >
-            {LINKS.map((link) => (
-              <a 
-                key={link}
-                href={`#${link.toLowerCase()}`} 
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="font-serif text-5xl hover:italic transition-all"
-              >
-                {link}
-              </a>
-            ))}
+            <div className="flex flex-col gap-4 md:gap-8 text-center w-full px-6 z-10">
+              {LINKS.map((link, index) => (
+                <motion.div
+                  key={link}
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 50 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 + 0.1, ease: [0.22, 1, 0.36, 1] }}
+                  className="overflow-hidden"
+                >
+                  <a 
+                    href={`#${link.toLowerCase()}`} 
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="group inline-block py-2"
+                  >
+                    <span className="font-serif text-[4rem] md:text-[8rem] tracking-tighter leading-none text-transparent [-webkit-text-stroke:1px_rgba(255,255,255,0.2)] group-hover:[-webkit-text-stroke:1px_rgba(255,255,255,1)] group-hover:text-white group-hover:italic transition-all duration-500 inline-block">
+                      {link}
+                    </span>
+                  </a>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Decorative background elements */}
+            <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 1.5, delay: 0.2 }}
+                className="absolute top-1/4 -left-1/4 w-[70vw] h-[70vw] bg-studio-accent/10 rounded-full blur-[100px]" 
+              />
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 1.5, delay: 0.4 }}
+                className="absolute -bottom-1/4 -right-1/4 w-[80vw] h-[80vw] bg-studio-navy/20 rounded-full blur-[120px]" 
+              />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
